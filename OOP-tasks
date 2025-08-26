@@ -1,0 +1,58 @@
+class Smartphone:
+    def __init__(self, brand, model, price):
+        self.brand = brand
+        self.model = model
+        self.__price = price
+
+    def get_price(self):
+        return self.__price
+
+    def set_price(self, new_price):
+        if new_price > 0:
+            self.__price = new_price
+        else:
+            print("Price must be positive.")
+
+    def specs(self):
+        print(f"Brand: {self.brand}, Model: {self.model}, Price: {self.__price}")
+
+
+class GamingPhone(Smartphone):
+    def __init__(self, brand, model, price, refresh_rate):
+        super().__init__(brand, model, price)
+        self.refresh_rate = refresh_rate
+
+    def specs(self):
+        print(f"Brand: {self.brand}, Model: {self.model}, Price: {self.get_price()}, Refresh Rate: {self.refresh_rate}Hz")
+
+
+phone1 = Smartphone("Samsung", "S24", 120000)
+phone1.specs()
+phone1.set_price(115000)
+phone1.specs()
+
+gaming_phone = GamingPhone("Asus", "ROG 8", 150000, 165)
+gaming_phone.specs()
+
+
+class Vehicle:
+    def move(self):
+        pass
+
+class Car(Vehicle):
+    def move(self):
+        print("Driving ")
+
+class Plane(Vehicle):
+    def move(self):
+        print("Flying ✈")
+
+class Boat(Vehicle):
+    def move(self):
+        print("Sailing ")
+
+
+vehicles = [Car(), Plane(), Boat()]
+
+for v in vehicles:
+    v.move()
