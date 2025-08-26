@@ -1,0 +1,74 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+
+try:
+    # Task 1: Load and Explore the Dataset
+    iris = load_iris()
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    df['species'] = iris.target
+    df['species'] = df['species'].map({0: 'setosa', 1: 'versicolor', 2: 'virginica'})
+
+    print("\nFirst 5 rows of the dataset:")
+    print(df.head())
+
+    print("\nDataset info:")
+    print(df.info())
+
+    print("\nChecking for missing values:")
+    print(df.isnull().sum())
+
+    df = df.dropna()  # Dropping missing values if any
+
+    # Task 2: Basic Data Analysis
+    print("\nStatistical Summary:")
+    print(df.describe())
+
+    grouped = df.groupby('species').mean()
+    print("\nAverage measurements per species:")
+    print(grouped)
+
+    # Task 3: Data Visualization
+    plt.figure(figsize=(12, 8))
+
+    # Line Chart - Mean sepal length per species
+    plt.subplot(2, 2, 1)
+    grouped['sepal length (cm)'].plot(marker='o', linestyle='-', color='blue')
+    plt.title("Mean Sepal Length per Species")
+    plt.xlabel("Species")
+    plt.ylabel("Sepal Length (cm)")
+
+    # Bar Chart - Average petal length per species
+    plt.subplot(2, 2, 2)
+    sns.barplot(x='species', y='petal length (cm)', data=df, palette="Set2")
+    plt.title("Average Petal Length per Species")
+    plt.xlabel("Species")
+    plt.ylabel("Petal Length (cm)")
+
+    # Histogram - Distribution of sepal length
+    plt.subplot(2, 2, 3)
+    plt.hist(df['sepal length (cm)'], bins=10, color='purple', alpha=0.7)
+    plt.title("Distribution of Sepal Length")
+    plt.xlabel("Sepal Length (cm)")
+    plt.ylabel("Frequency")
+
+    # Scatter Plot - Sepal length vs Petal length
+    plt.subplot(2, 2, 4)
+    sns.scatterplot(x='sepal length (cm)', y='petal length (cm)', hue='species', data=df, palette="Set1")
+    plt.title("Sepal Length vs Petal Length")
+    plt.xlabel("Sepal Length (cm)")
+    plt.ylabel("Petal Length (cm)")
+    plt.legend(title="Species")
+
+    plt.tight_layout()
+    plt.show()
+
+except FileNotFoundError:
+    print("Error: The dataset file was not found.")
+except pd.errors.EmptyDataError:
+    print("Error: The dataset is empty.")
+except pd.errors.ParserError:
+    print("Error: Problem parsing the dataset.")
+except Exception as e:
+    print("An unexpected error occurred:", e)
