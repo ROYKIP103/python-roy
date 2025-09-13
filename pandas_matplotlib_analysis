@@ -1,0 +1,55 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+
+# --- Load the dataset ---
+try:
+    iris = load_iris(as_frame=True)
+    df = iris.frame
+    print("Dataset loaded successfully.\n")
+except Exception as e:
+    print(f"Could not load dataset: {e}")
+
+# Take a quick look
+print(df.head(), "\n")
+print(df.info(), "\n")
+print("Missing values:\n", df.isnull().sum(), "\n")
+
+# Clean if needed
+df = df.dropna()
+
+# --- Basic analysis ---
+print("Quick stats:\n", df.describe(), "\n")
+print("Average petal length per species:\n", df.groupby("target")["petal length (cm)"].mean(), "\n")
+
+# --- Visuals ---
+# Line chart: pretend the index is time
+plt.plot(df.index, df["sepal length (cm)"], label="Sepal Length")
+plt.title("Sepal Length over Index")
+plt.xlabel("Index")
+plt.ylabel("Sepal Length (cm)")
+plt.legend()
+plt.show()
+
+# Bar chart: average petal length by species
+df.groupby("target")["petal length (cm)"].mean().plot(kind="bar", color="skyblue")
+plt.title("Average Petal Length per Species")
+plt.xlabel("Species (0=Setosa,1=Versicolor,2=Virginica)")
+plt.ylabel("Petal Length (cm)")
+plt.show()
+
+# Histogram: distribution of sepal width
+plt.hist(df["sepal width (cm)"], bins=15, color="lightgreen", edgecolor="black")
+plt.title("Sepal Width Distribution")
+plt.xlabel("Sepal Width (cm)")
+plt.ylabel("Count")
+plt.show()
+
+# Scatter plot: sepal length vs petal length
+sns.scatterplot(data=df, x="sepal length (cm)", y="petal length (cm)", hue="target", palette="Set1")
+plt.title("Sepal Length vs Petal Length")
+plt.xlabel("Sepal Length (cm)")
+plt.ylabel("Petal Length (cm)")
+plt.legend(title="Species")
+plt.show()
